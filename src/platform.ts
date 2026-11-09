@@ -27,8 +27,11 @@ export const chromePlatform: Platform = {
   storage: store(chrome.storage.local, 'local'),
   session: store(chrome.storage.session, 'session'),
   clientName: 'Wiro for Chrome',
-  // https://<extension id>.chromiumapp.org/: Chrome catches the redirect to it.
-  redirectUri: () => chrome.identity.getRedirectURL(),
+  // https://<extension id>.chromiumapp.org/: Chromium catches the redirect to it.
+  // Opera supports launchWebAuthFlow but not getRedirectURL, so build it there.
+  redirectUri: () => (typeof chrome.identity.getRedirectURL === 'function'
+    ? chrome.identity.getRedirectURL()
+    : `https://${chrome.runtime.id}.chromiumapp.org/`),
   async launchAuth(url) {
     const result = await chrome.identity.launchWebAuthFlow({ url, interactive: true });
     if (!result) throw new Error('The sign-in window was closed.');

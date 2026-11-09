@@ -30,14 +30,23 @@ A development build carries the public key in `dev-key.txt`, so its ID stays `dg
 
 Sign-in uses the Wiro OAuth server at `mcp.wiro.ai` (PKCE, no API key in the browser). Its redirect address is `https://<extension-id>.chromiumapp.org/`, and the server accepts only redirect addresses it knows. The development ID's address and, after the first store upload, the store ID's address have to be on that list.
 
-## Store build
+## Store builds
 
 ```bash
 npm run build:store
-cd dist && zip -r ../wiro-chrome.zip . && cd ..
 ```
 
-The store build leaves out the development key, so the Chrome Web Store keeps its own ID.
+This writes one folder and one zip per store under `release/`, all without the development key, so each store assigns or keeps its own ID:
+
+| Package | Store | Browsers |
+| --- | --- | --- |
+| `wiro-chrome-<version>.zip` | Chrome Web Store | Chrome, Brave, Vivaldi, Arc |
+| `wiro-edge-<version>.zip` | Microsoft Edge Add-ons | Edge |
+| `wiro-opera-<version>.zip` | addons.opera.com | Opera |
+
+Opera lists no side panel API and no `identity.getRedirectURL`, so its package uses Opera's own `sidebar_action`, opens the panel as a popup from the toolbar button and in a tab from a right-click, and builds the `chromiumapp.org` redirect address from the extension ID. Any Chromium browser without the side panel API gets the same tab behaviour.
+
+Each store's extension ID needs its `https://<id>.chromiumapp.org/` address on the sign-in server's list of known redirect addresses before sign-in works there.
 
 ## Permissions
 
