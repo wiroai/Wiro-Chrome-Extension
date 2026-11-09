@@ -1,52 +1,88 @@
-# Wiro for Chrome
+<div align="center">
 
-Right-click an image, video, audio clip, selected text or a page to run Wiro AI models and tools in Chrome's side panel: animate, edit, upscale, restore, read aloud, transcribe, translate and more. The models come live from Wiro's categories, so new models show up without an extension update.
+<img src="https://raw.githubusercontent.com/wiroai/Wiro-Chromium-Extension/main/.github/assets/wiro-logo.png" alt="Wiro AI" width="240">
 
-The shared code (sign-in, MCP client, actions, gateway, pricing, panel) lives in [Wiro-Extension-Core](https://github.com/wiroai/Wiro-Extension-Core), included here as the `core/` submodule. This repo adds the Chrome parts:
+# Wiro AI Browser Extension for Chrome, Edge, Opera and Brave
 
-- `src/platform.ts`: storage, the sign-in window (`chrome.identity.launchWebAuthFlow`) and tabs.
-- `src/background.ts`: the service worker. It builds the right-click menus and opens the side panel on a click.
-- `src/panel.ts`, `public/panel.html`: the side panel page.
-- `manifest.json`: Manifest V3.
+Right-click any image, video, audio clip, text or page to run Wiro AI models: make a video, edit or upscale an image, restore a photo, read text aloud, transcribe, translate and more, with the price shown before every run.
 
-## Build
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-111111?style=for-the-badge&color=111111)](./manifest.json) [![Chrome, Edge, Opera](https://img.shields.io/badge/Chrome%20%7C%20Edge%20%7C%20Opera-111111?style=for-the-badge&color=111111)](#store-packages) [![TypeScript](https://img.shields.io/badge/TypeScript-111111?style=for-the-badge&color=111111)](./tsconfig.json) [![License: MIT](https://img.shields.io/badge/license-MIT-111111?style=for-the-badge&color=111111)](./LICENSE)
+
+[Website](https://wiro.ai) · [Models](https://wiro.ai/models) · [Docs](https://wiro.ai/docs) · [Dashboard](https://wiro.ai/panel)
+
+<img src="https://wiro.ai/images/koala/accent-heavy-koala.png" alt="Wiro AI koala mascot" width="60" />
+
+</div>
+
+Wiro puts its AI models one right-click away. Pick what you want done with an image, a video, an audio clip, selected text or the page, choose a model from the live Wiro catalog, and the result comes back in a panel next to the page. You sign in with your Wiro account, runs are paid from your Wiro wallet, and the panel shows the price before you start.
+
+<p align="center">
+  <img src=".github/assets/screenshots/1-menu.png" alt="The Wiro entries in the right-click menu of an image" width="49%">
+  <img src=".github/assets/screenshots/2-edit.png" alt="Editing an image with a prompt in the Wiro side panel, with the price shown before the run" width="49%">
+</p>
+<p align="center">
+  <img src=".github/assets/screenshots/3-video.png" alt="Turning a photo into a video with the model you pick" width="32%">
+  <img src=".github/assets/screenshots/4-models.png" alt="The models for a job, sorted by price, popularity or date" width="32%">
+  <img src=".github/assets/screenshots/5-studio.png" alt="Turning a page into a video with Wiro Studio" width="32%">
+</p>
+
+## What you can do
+
+| Right-click on | Actions |
+| --- | --- |
+| An image | make a video, edit with a prompt, upscale, restore an old photo, remove the background, blur faces, find objects, make a 3D model, ask about it, extract or translate its text, make a product ad, add effects, make a song from it, make it talk, try clothes on |
+| A video | edit with a prompt, upscale, add music, ask about it |
+| An audio clip | transcribe it, change the voice |
+| Selected text | generate an image or a video, read it aloud, turn it into a song, translate it, summarize it |
+| A page | turn it into a video with Wiro Studio, ask about it |
+
+Each action lists the Wiro models made for it, so new models show up without an extension update. Sort them by price, popularity or date and pick one; the panel asks only for what that model needs. Download a result, copy its link, or keep it in the tray for the next step. Your recent runs are listed under History.
+
+## Install
+
+Store links will appear here once the listings are live on the Chrome Web Store, Microsoft Edge Add-ons and Opera add-ons. To try it now, build it from source with Node.js 22 or later:
 
 ```bash
-git clone --recurse-submodules https://github.com/wiroai/Wiro-Chrome-Extension.git
-cd Wiro-Chrome-Extension
+git clone --recurse-submodules https://github.com/wiroai/Wiro-Chromium-Extension.git
+cd Wiro-Chromium-Extension
 npm install
 (cd core && npm install)
-npm run typecheck
 npm run build
 ```
 
-Then open `chrome://extensions`, turn on Developer mode, choose **Load unpacked** and pick `dist/`.
+Then open `chrome://extensions` (or `edge://extensions`), turn on Developer mode, choose **Load unpacked** and pick `dist/`.
 
-After a core change: `git -C core pull origin main`, rebuild, and commit the new `core` pointer.
-
-## Extension ID and sign-in
-
-A development build carries the public key in `dev-key.txt`, so its ID stays `dgnlhjpdifdkkfglhhiafpedepmhckbn` on every machine. The private key is not in this repo.
-
-Sign-in uses the Wiro OAuth server at `mcp.wiro.ai` (PKCE, no API key in the browser). Its redirect address is `https://<extension-id>.chromiumapp.org/`, and the server accepts only redirect addresses it knows. The development ID's address and, after the first store upload, the store ID's address have to be on that list.
-
-## Store builds
+## Store packages
 
 ```bash
 npm run build:store
 ```
 
-This writes one folder and one zip per store under `release/`, all without the development key, so each store assigns or keeps its own ID:
+This writes one folder and one zip per store under `release/`, without the development key, so each store assigns its own extension ID:
 
 | Package | Store | Browsers |
 | --- | --- | --- |
 | `wiro-chrome-<version>.zip` | Chrome Web Store | Chrome, Brave, Vivaldi, Arc |
 | `wiro-edge-<version>.zip` | Microsoft Edge Add-ons | Edge |
-| `wiro-opera-<version>.zip` | addons.opera.com | Opera |
+| `wiro-opera-<version>.zip` | Opera add-ons | Opera |
 
-Opera lists no side panel API and no `identity.getRedirectURL`, so its package uses Opera's own `sidebar_action`, opens the panel as a popup from the toolbar button and in a tab from a right-click, and builds the `chromiumapp.org` redirect address from the extension ID. Any Chromium browser without the side panel API gets the same tab behaviour.
+All three come from the same code. Opera has no side panel API, so its package uses Opera's own sidebar (`sidebar_action`), opens the panel as a popup from the toolbar button and in a tab from a right-click, and carries the 45-character name that Opera's store accepts. Any Chromium browser without the side panel API gets the same tab behaviour.
 
-Each store's extension ID needs its `https://<id>.chromiumapp.org/` address on the sign-in server's list of known redirect addresses before sign-in works there.
+## How it is built
+
+The shared code (sign-in, MCP client, actions, model gateway, pricing and the panel UI) lives in [Wiro-Extension-Core](https://github.com/wiroai/Wiro-Extension-Core), included here as the `core/` submodule. This repo adds the Chromium parts:
+
+- `src/platform.ts`: storage, the sign-in window (`chrome.identity.launchWebAuthFlow`) and tabs.
+- `src/background.ts`: the service worker. It builds the right-click menus and opens the side panel, or a tab where there is no side panel.
+- `src/panel.ts`, `public/panel.html`: the panel page.
+- `manifest.json`: Manifest V3.
+- `scripts/build.mjs`: the esbuild build for development and for the store packages. The bundle is not minified.
+
+After a core change: `git -C core pull origin main`, rebuild, and commit the new `core` pointer.
+
+## Sign-in
+
+The extension signs in with a Wiro account through the OAuth 2.1 server at `mcp.wiro.ai`, with PKCE, so no API key is stored in the browser. Its redirect address is `https://<extension-id>.chromiumapp.org/`. A development build carries the public key in `dev-key.txt`, so its ID stays `dgnlhjpdifdkkfglhhiafpedepmhckbn` on every machine. The private key is not in this repo.
 
 ## Permissions
 
@@ -57,4 +93,31 @@ Each store's extension ID needs its `https://<id>.chromiumapp.org/` address on t
 | `storage` | the sign-in tokens, the tray, run history and the last model picked per action |
 | `identity` | the Wiro sign-in window |
 
-No host permissions and no content scripts: the extension reads only what a right-click hands it (the item's address, the selected text, the page address) and sends it to Wiro when the user starts a run.
+No host permissions and no content scripts: the extension reads only what a right-click hands it (the item's address, the selected text or the page address) and sends it to Wiro when you start a run. See the [Wiro privacy policy](https://wiro.ai/agreement/privacy-policy).
+
+## More from Wiro AI
+
+| Repository | What it is |
+| --- | --- |
+| [Wiro-Firefox-Extension](https://github.com/wiroai/Wiro-Firefox-Extension) | Wiro AI add-on for Firefox |
+| [Wiro-Safari-Extension](https://github.com/wiroai/Wiro-Safari-Extension) | Wiro AI extension for Safari on the Mac |
+| [Wiro-Extension-Core](https://github.com/wiroai/Wiro-Extension-Core) | Shared core of the Wiro AI browser extensions |
+| [Wiro-MCP](https://github.com/wiroai/Wiro-MCP) | Official MCP server for Wiro AI, [`@wiro-ai/wiro-mcp` on npm](https://www.npmjs.com/package/@wiro-ai/wiro-mcp) |
+| [Wiro-Plugin](https://github.com/wiroai/Wiro-Plugin) | Wiro AI plugin for Cursor, Claude Code, Gemini CLI and Devin |
+| [Wiro-LLM](https://github.com/wiroai/Wiro-LLM) | Wiro AI provider for the Vercel AI SDK |
+| [Swift-QuickStart](https://github.com/wiroai/Swift-QuickStart) | WiroKit, the Wiro AI SDK for iOS |
+| [Kotlin-QuickStart](https://github.com/wiroai/Kotlin-QuickStart) | WiroKit, the Wiro AI SDK for Android |
+| [Dart-QuickStart](https://github.com/wiroai/Dart-QuickStart) | Wiro AI SDK for Dart and Flutter, [`wiro` on pub.dev](https://pub.dev/packages/wiro) |
+| [ReactNative-QuickStart](https://github.com/wiroai/ReactNative-QuickStart) | Wiro AI SDK for React Native and Expo, [`@wiro-ai/wiro-react-native` on npm](https://www.npmjs.com/package/@wiro-ai/wiro-react-native) |
+| [Swift-Realtime](https://github.com/wiroai/Swift-Realtime) | Realtime voice AI example for iOS |
+| [Kotlin-Realtime](https://github.com/wiroai/Kotlin-Realtime) | Realtime voice AI example for Android |
+| [Dart-Realtime](https://github.com/wiroai/Dart-Realtime) | Realtime voice AI example for Flutter |
+| [ReactNative-Realtime](https://github.com/wiroai/ReactNative-Realtime) | Realtime voice AI example for React Native |
+| [n8n-nodes-wiroai](https://github.com/wiroai/n8n-nodes-wiroai) | Wiro AI nodes for n8n, [`@wiro-ai/n8n-nodes-wiroai` on npm](https://www.npmjs.com/package/@wiro-ai/n8n-nodes-wiroai) |
+| [Wiro-Docs](https://github.com/wiroai/Wiro-Docs) | Source of the Wiro AI API docs |
+
+[Website](https://wiro.ai) · [Models](https://wiro.ai/models) · [Docs](https://wiro.ai/docs) · [X](https://x.com/wiroai)
+
+## License
+
+MIT, see [LICENSE](./LICENSE).
