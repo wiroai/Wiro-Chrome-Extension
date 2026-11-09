@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Wiro: AI Tools for Images, Video, Audio and Text",
+  "short_name": "Wiro",
+  "version": "0.1.0",
+  "description": "Right-click an image, video, audio clip or selected text to run Wiro AI models and tools: animate, edit, upscale, voice and more.",
+  "homepage_url": "https://wiro.ai",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_title": "Wiro",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "permissions": ["contextMenus", "sidePanel", "storage", "identity"]
+}

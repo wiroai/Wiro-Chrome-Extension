@@ -1,0 +1,21 @@
+{
+  "name": "wiro-chrome-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Wiro AI for Chrome: right-click any image, video, audio clip or text to run Wiro AI models and tools.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:store": "node scripts/build.mjs --store",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "preact": "11.0.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.3.5",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}
