@@ -1,12 +1,14 @@
 import { buildMenus, jobFromClick, JOB_KEY, type MenusApi } from '../core/src/background/menus.js';
 import { loadCatalog } from '../core/src/catalog/catalog.js';
 import { DEFAULT_CONFIG } from '../core/src/config.js';
+import { OAuth } from '../core/src/auth/oauth.js';
 import { chromePlatform } from './platform.js';
+import { AUTH_MESSAGE, CALLBACK_URL } from './platform-constants.js';
 
 // The service worker: builds the right-click menus from the action catalog and
 // hands each click to the panel. Chrome and Edge show the panel in their side
-// panel. A Chromium browser without the side panel API (Opera) shows it in a
-// tab instead, and its toolbar button opens it as a popup.
+// panel. A Chromium browser without the side panel API (Opera, Whale) shows it
+// in a tab instead, and its toolbar button opens it as a popup.
 
 const PANEL_TAB_KEY = 'wiro.panelTab';
 const hasSidePanel = typeof chrome.sidePanel?.open === 'function';
@@ -61,4 +63,30 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     return;
   }
   void chrome.storage.session.set({ [JOB_KEY]: job }).then(showPanelTab);
+});
+
+// Whale build: wiro.ai sends the browser back to the callback page, whose
+// content script (src/callback.ts) hands the address here to finish the
+// sign-in. Other builds sign in with chrome.identity and never get this message.
+const oauth = new OAuth(chromePlatform, DEFAULT_CONFIG);
+
+interface AuthCallback {
+  type: string;
+  url: string;
+}
+
+chrome.runtime.onMessage.addListener((message: unknown, sender, sendResponse) => {
+  const callback = message as AuthCallback | undefined;
+  if (callback?.type !== AUTH_MESSAGE || typeof callback.url !== 'string') return undefined;
+  // Only the callback content script on wiro.ai may finish a sign-in.
+  if (sender.id !== chrome.runtime.id || !sender.url?.startsWith(CALLBACK_URL) || !callback.url.startsWith(CALLBACK_URL)) return undefined;
+  oauth.completeSignIn(callback.url).then(
+    () => {
+      if (sender.tab?.id !== undefined) void chrome.tabs.remove(sender.tab.id);
+      sendResponse({ ok: true });
+    },
+    (error: unknown) => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }),
+  );
+  // Keeps sendResponse open until the sign-in is done.
+  return true;
 });

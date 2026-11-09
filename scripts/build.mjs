@@ -4,7 +4,7 @@
 //                                    development key, so the ID stays fixed)
 //   node scripts/build.mjs --store   store builds in release/<store>/ plus a zip
 //                                    each: chrome (also Brave, Vivaldi, Arc),
-//                                    edge and opera
+//                                    edge, opera and whale
 //
 // Store builds leave the key out, so each store assigns or keeps its own ID.
 // Opera has no side panel API, so its manifest swaps the side panel for
@@ -51,6 +51,16 @@ function manifestFor(target) {
       default_icon: { 16: 'icons/icon-16.png', 32: 'icons/icon-32.png' },
     };
   }
+  if (target === 'whale') {
+    // Whale's store refuses the identity permission, so this build signs in
+    // through a tab and the wiro.ai callback page, like Safari (src/callback.ts).
+    // Without Chrome's side panel API it works like Opera: a popup from the
+    // toolbar button and a tab from a right-click.
+    delete manifest.side_panel;
+    manifest.permissions = manifest.permissions.filter(permission => permission !== 'identity' && permission !== 'sidePanel');
+    manifest.action.default_popup = 'panel.html';
+    manifest.content_scripts = [{ matches: ['https://wiro.ai/extension/callback*'], js: ['callback.js'], run_at: 'document_idle' }];
+  }
   return manifest;
 }
 
@@ -59,6 +69,7 @@ async function buildInto(dir, target, withKey) {
   await mkdir(dir, { recursive: true });
   await build({ ...common, entryPoints: { background: resolve(root, 'src/background.ts') }, outdir: dir });
   await build({ ...common, entryPoints: { panel: resolve(root, 'src/panel.ts') }, outdir: dir, loader: { '.css': 'css' } });
+  if (target === 'whale') await build({ ...common, entryPoints: { callback: resolve(root, 'src/callback.ts') }, outdir: dir });
   await cp(resolve(root, 'public'), dir, { recursive: true });
   const manifest = manifestFor(target);
   const keyFile = resolve(root, 'dev-key.txt');
@@ -70,7 +81,7 @@ if (!store) {
   await buildInto(resolve(root, 'dist'), 'chrome', true);
   console.log(`Built development extension ${pkg.version} in dist/`);
 } else {
-  for (const target of ['chrome', 'edge', 'opera']) {
+  for (const target of ['chrome', 'edge', 'opera', 'whale']) {
     const dir = resolve(root, 'release', target);
     await buildInto(dir, target, false);
     const zip = resolve(root, 'release', `wiro-${target}-${pkg.version}.zip`);
