@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Wiro: AI Tools for Images, Video, Audio and Text",
   "short_name": "Wiro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Right-click an image, video, audio clip or selected text to run Wiro AI models and tools: animate, edit, upscale, voice and more.",
   "homepage_url": "https://wiro.ai",
   "minimum_chrome_version": "116",
