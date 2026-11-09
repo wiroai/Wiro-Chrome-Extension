@@ -39,6 +39,8 @@ baseManifest.version = pkg.version;
 function manifestFor(target) {
   const manifest = structuredClone(baseManifest);
   if (target === 'opera') {
+    // Opera's store still applies the old 45-character limit to the name.
+    manifest.name = 'Wiro: AI Tools for Images, Video, Audio, Text';
     delete manifest.side_panel;
     delete manifest.minimum_chrome_version;
     manifest.permissions = manifest.permissions.filter(permission => permission !== 'sidePanel');
