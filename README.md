@@ -40,7 +40,9 @@ Each action lists the Wiro models made for it, so new models show up without an 
 
 ## Install
 
-Store links will appear here once the listings are live on the Chrome Web Store, Microsoft Edge Add-ons and Opera add-ons. To try it now, build it from source with Node.js 22 or later:
+Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab). There is more about the extension at [wiro.ai/browser-extension](https://wiro.ai/browser-extension). Links to Microsoft Edge Add-ons and Opera add-ons will be added here when those listings go live.
+
+To build it from source, use Node.js 22 or later:
 
 ```bash
 git clone --recurse-submodules https://github.com/wiroai/Wiro-Chromium-Extension.git
