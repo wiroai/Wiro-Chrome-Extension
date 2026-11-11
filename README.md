@@ -2,11 +2,11 @@
 
 <img src="https://raw.githubusercontent.com/wiroai/Wiro-Chromium-Extension/main/.github/assets/wiro-logo.png" alt="Wiro AI" width="240">
 
-# Wiro AI Browser Extension for Chrome, Edge, Opera and Brave
+# Wiro AI Browser Extension for Chrome, Edge, Opera, Whale and Brave
 
 Right-click any image, video, audio clip, text or page to run Wiro AI models: make a video, edit or upscale an image, restore a photo, read text aloud, transcribe, translate and more, with the price shown before every run.
 
-[![Manifest V3](https://img.shields.io/badge/Manifest-V3-111111?style=for-the-badge&color=111111)](./manifest.json) [![Chrome, Edge, Opera](https://img.shields.io/badge/Chrome%20%7C%20Edge%20%7C%20Opera-111111?style=for-the-badge&color=111111)](#store-packages) [![TypeScript](https://img.shields.io/badge/TypeScript-111111?style=for-the-badge&color=111111)](./tsconfig.json) [![License: MIT](https://img.shields.io/badge/license-MIT-111111?style=for-the-badge&color=111111)](./LICENSE)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-111111?style=for-the-badge&color=111111)](./manifest.json) [![Chrome, Edge, Opera, Whale](https://img.shields.io/badge/Chrome%20%7C%20Edge%20%7C%20Opera%20%7C%20Whale-111111?style=for-the-badge&color=111111)](#store-packages) [![TypeScript](https://img.shields.io/badge/TypeScript-111111?style=for-the-badge&color=111111)](./tsconfig.json) [![License: MIT](https://img.shields.io/badge/license-MIT-111111?style=for-the-badge&color=111111)](./LICENSE)
 
 [Website](https://wiro.ai) · [Models](https://wiro.ai/models) · [Docs](https://wiro.ai/docs) · [Dashboard](https://wiro.ai/panel)
 
@@ -51,7 +51,7 @@ Each action lists the Wiro models made for it, so new models show up without an 
 
 ## Install
 
-Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab). There is more about the extension at [wiro.ai/browser-extension](https://wiro.ai/browser-extension). Links to Microsoft Edge Add-ons and Opera add-ons will be added here when those listings go live.
+Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab). There is more about the extension at [wiro.ai/browser-extension](https://wiro.ai/browser-extension). Links to Microsoft Edge Add-ons, Opera add-ons and the Naver Whale Store will be added here when those listings go live.
 
 To build it from source, use Node.js 22 or later:
 
@@ -78,8 +78,9 @@ This writes one folder and one zip per store under `release/`, without the devel
 | `wiro-chrome-<version>.zip` | Chrome Web Store | Chrome, Brave, Vivaldi, Arc |
 | `wiro-edge-<version>.zip` | Microsoft Edge Add-ons | Edge |
 | `wiro-opera-<version>.zip` | Opera add-ons | Opera |
+| `wiro-whale-<version>.zip` | Naver Whale Store | Whale |
 
-All three come from the same code. Opera has no side panel API, so its package uses Opera's own sidebar (`sidebar_action`), opens the panel as a popup from the toolbar button and in a tab from a right-click, and carries the 45-character name that Opera's store accepts. Any Chromium browser without the side panel API gets the same tab behaviour.
+All four come from the same code. Opera has no side panel API, so its package uses Opera's own sidebar (`sidebar_action`), opens the panel as a popup from the toolbar button and in a tab from a right-click, and carries the 45-character name that Opera's store accepts. Any Chromium browser without the side panel API gets the same tab behaviour. The Whale Store does not accept the `identity` permission, so the Whale package opens the panel as a popup from the toolbar button and in a tab from a right-click, and signs in through Wiro's sign-in page in a tab, like the Safari extension.
 
 ## How it is built
 
@@ -88,6 +89,7 @@ The shared code (sign-in, MCP client, actions, model gateway, pricing and the pa
 - `src/platform.ts`: storage, the sign-in window (`chrome.identity.launchWebAuthFlow`) and tabs.
 - `src/background.ts`: the service worker. It builds the right-click menus and opens the side panel, or a tab where there is no side panel.
 - `src/panel.ts`, `public/panel.html`: the panel page.
+- `src/callback.ts`: Whale package only. A content script on Wiro's sign-in callback page that hands the result to the background, which finishes the sign-in.
 - `manifest.json`: Manifest V3.
 - `scripts/build.mjs`: the esbuild build for development and for the store packages. The bundle is not minified.
 
@@ -96,6 +98,8 @@ After a core change: `git -C core pull origin main`, rebuild, and commit the new
 ## Sign-in
 
 The extension signs in with a Wiro account through the OAuth 2.1 server at `mcp.wiro.ai`, with PKCE, so no API key is stored in the browser. Its redirect address is `https://<extension-id>.chromiumapp.org/`. A development build carries the public key in `dev-key.txt`, so its ID stays `dgnlhjpdifdkkfglhhiafpedepmhckbn` on every machine. The private key is not in this repo.
+
+The Whale package has no `identity` permission. It opens the sign-in page in a tab, Wiro sends the browser back to `https://wiro.ai/extension/callback`, and the extension finishes the sign-in there.
 
 ## Permissions
 
@@ -106,7 +110,7 @@ The extension signs in with a Wiro account through the OAuth 2.1 server at `mcp.
 | `storage` | the sign-in tokens, the tray, run history and the last model picked per action |
 | `identity` | the Wiro sign-in window |
 
-No host permissions and no content scripts: the extension reads only what a right-click hands it (the item's address, the selected text or the page address) and sends it to Wiro when you start a run. See the [Wiro privacy policy](https://wiro.ai/agreement/privacy-policy).
+No host permissions and no content scripts: the extension reads only what a right-click hands it (the item's address, the selected text or the page address) and sends it to Wiro when you start a run. The Whale package drops `sidePanel` and `identity`; its only content script runs on Wiro's sign-in callback page. See the [Wiro privacy policy](https://wiro.ai/agreement/privacy-policy).
 
 ## More from Wiro AI
 
