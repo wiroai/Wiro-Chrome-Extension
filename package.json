@@ -1,6 +1,6 @@
 {
   "name": "wiro-chromium-extension",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "Wiro AI for Chrome: right-click any image, video, audio clip or text to run Wiro AI models and tools.",
