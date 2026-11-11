@@ -17,13 +17,24 @@ Right-click any image, video, audio clip, text or page to run Wiro AI models: ma
 Wiro puts its AI models one right-click away. Pick what you want done with an image, a video, an audio clip, selected text or the page, choose a model from the live Wiro catalog, and the result comes back in a panel next to the page. You sign in with your Wiro account, runs are paid from your Wiro wallet, and the panel shows the price before you start.
 
 <p align="center">
-  <img src=".github/assets/screenshots/1-menu.png" alt="The Wiro entries in the right-click menu of an image" width="49%">
-  <img src=".github/assets/screenshots/2-edit.png" alt="Editing an image with a prompt in the Wiro side panel, with the price shown before the run" width="49%">
+  <img src=".github/assets/screenshots/01-photo-to-video.png" alt="The Wiro panel turning a photo of a dog into a video" width="49%">
+  <img src=".github/assets/screenshots/02-page-to-video.png" alt="The Wiro panel sending a page to Wiro Studio to make a video" width="49%">
 </p>
 <p align="center">
-  <img src=".github/assets/screenshots/3-video.png" alt="Turning a photo into a video with the model you pick" width="32%">
-  <img src=".github/assets/screenshots/4-models.png" alt="The models for a job, sorted by price, popularity or date" width="32%">
-  <img src=".github/assets/screenshots/5-studio.png" alt="Turning a page into a video with Wiro Studio" width="32%">
+  <img src=".github/assets/screenshots/03-brief-to-image.png" alt="The Wiro panel turning selected text into a magazine cover image" width="49%">
+  <img src=".github/assets/screenshots/04-edit-video.png" alt="The Wiro panel editing a bike video so the trail is covered in snow" width="49%">
+</p>
+<p align="center">
+  <img src=".github/assets/screenshots/05-models.png" alt="The models made for a job, sorted by price, popularity or date" width="49%">
+  <img src=".github/assets/screenshots/06-song.png" alt="The Wiro panel turning selected lines into a song" width="49%">
+</p>
+<p align="center">
+  <img src=".github/assets/screenshots/07-read-aloud.png" alt="The Wiro panel reading selected text aloud in a chosen voice" width="49%">
+  <img src=".github/assets/screenshots/08-every-action.png" alt="Every Wiro action for an image, one right-click away" width="49%">
+</p>
+<p align="center">
+  <img src=".github/assets/screenshots/09-translate.png" alt="The Wiro panel translating selected Spanish text into English" width="49%">
+  <img src=".github/assets/screenshots/10-price.png" alt="The Wiro panel showing the price of an image edit before the run" width="49%">
 </p>
 
 ## What you can do
