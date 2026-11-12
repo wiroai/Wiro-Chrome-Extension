@@ -75,7 +75,7 @@ This writes one folder and one zip per store under `release/`, without the devel
 
 | Package | Store | Browsers |
 | --- | --- | --- |
-| `wiro-chrome-<version>.zip` | Chrome Web Store | Chrome, Brave, Vivaldi, Arc |
+| `wiro-chrome-<version>.zip` | [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab) | Chrome, Brave, Vivaldi, Arc |
 | `wiro-edge-<version>.zip` | Microsoft Edge Add-ons | Edge |
 | `wiro-opera-<version>.zip` | Opera add-ons | Opera |
 | `wiro-whale-<version>.zip` | [Naver Whale Store](https://store.whale.naver.com/detail/elgobhnkemhlhfakdmpijbknhehnkgle) | Whale |
