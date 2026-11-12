@@ -51,7 +51,7 @@ Each action lists the Wiro models made for it, so new models show up without an 
 
 ## Install
 
-Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab). There is more about the extension at [wiro.ai/browser-extension](https://wiro.ai/browser-extension). Links to Microsoft Edge Add-ons, Opera add-ons and the Naver Whale Store will be added here when those listings go live.
+Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/wiro-ai-tools-for-images/cehkhdmppbnfeahegjjkdhangjelehab), or in Whale from the [Naver Whale Store](https://store.whale.naver.com/detail/elgobhnkemhlhfakdmpijbknhehnkgle). There is more about the extension at [wiro.ai/browser-extension](https://wiro.ai/browser-extension). Links to Microsoft Edge Add-ons and Opera add-ons will be added here when those listings go live.
 
 To build it from source, use Node.js 22 or later:
 
@@ -78,7 +78,7 @@ This writes one folder and one zip per store under `release/`, without the devel
 | `wiro-chrome-<version>.zip` | Chrome Web Store | Chrome, Brave, Vivaldi, Arc |
 | `wiro-edge-<version>.zip` | Microsoft Edge Add-ons | Edge |
 | `wiro-opera-<version>.zip` | Opera add-ons | Opera |
-| `wiro-whale-<version>.zip` | Naver Whale Store | Whale |
+| `wiro-whale-<version>.zip` | [Naver Whale Store](https://store.whale.naver.com/detail/elgobhnkemhlhfakdmpijbknhehnkgle) | Whale |
 
 All four come from the same code. Opera has no side panel API, so its package uses Opera's own sidebar (`sidebar_action`), opens the panel as a popup from the toolbar button and in a tab from a right-click, and carries the 45-character name that Opera's store accepts. Any Chromium browser without the side panel API gets the same tab behaviour. The Whale Store does not accept the `identity` permission, so the Whale package opens the panel as a popup from the toolbar button and in a tab from a right-click, and signs in through Wiro's sign-in page in a tab, like the Safari extension.
 
